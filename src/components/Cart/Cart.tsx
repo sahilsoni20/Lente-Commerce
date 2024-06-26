@@ -20,22 +20,22 @@ const theme = createTheme({
 });
 
 export const Cart = ({ cart, handleUpdateCartQuantity, handleRemoveFromCart, handleCartEmpty }: CartProps) => {
-    
+
     if (!cart) {
         return <div className='loading'><img src={Animation} alt="loading..." /></div>;
     }
-    
+
     const renderEmptyCart = (
         <Typography
             variant='subtitle1'
             component='h2'
             textAlign='center'
             mt='250px'
-        >   
-            You have no items in your cart 
+        >
+            You have no items in your cart
             <Link to='/' color="primary">
-                start adding some. 
-            </Link> 
+                start adding some.
+            </Link>
         </Typography>
     );
 
@@ -43,13 +43,13 @@ export const Cart = ({ cart, handleUpdateCartQuantity, handleRemoveFromCart, han
         <ThemeProvider theme={theme}>
             <Grid container spacing={3} >
                 {cart.line_items.map((lineItem) => (
-                   <Grid item xs={3} sm={12} key={lineItem.id}>
-                    <CartItem
-                        lineItem={lineItem}
-                        onUpdateQuery={handleUpdateCartQuantity}
-                        onRemoveCart={handleRemoveFromCart}
-                    />
-                   </Grid> 
+                    <Grid item xs={12} sm={6} key={lineItem.id}>
+                        <CartItem
+                            lineItem={lineItem}
+                            onUpdateQuery={handleUpdateCartQuantity}
+                            onRemoveCart={handleRemoveFromCart}
+                        />
+                    </Grid>
                 ))}
             </Grid>
             <Container
@@ -68,7 +68,7 @@ export const Cart = ({ cart, handleUpdateCartQuantity, handleRemoveFromCart, han
                 >
                     Subtotal: {cart.subtotal.formatted_with_symbol}
                 </Typography>
-                <Container 
+                <Container
                     sx={{
                         display: 'flex',
                         justifyContent: 'flex-end',
