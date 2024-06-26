@@ -1,10 +1,11 @@
 import './index.css'
+import {Home} from './components/Home/Home'
 
 function App() {
 
   return (
     <>
-    working fine
+      <Home/>
     </>
   )
 }
