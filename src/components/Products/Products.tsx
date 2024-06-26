@@ -4,7 +4,6 @@ import { Product } from './Product';
 import { commerce } from '../../lib/Commerce';
 import { useEffect, useState } from 'react';
 import Animation from '../../assets/Animation.gif'
-import './loading.css'
 
 export const Products = () => {
   const [products, setProducts] = useState<ProductType[]>([]);

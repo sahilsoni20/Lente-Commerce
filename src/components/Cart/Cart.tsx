@@ -1,24 +1,30 @@
-import {Cart as CartType} from '@chec/commerce.js/types/cart'
-import { Container, Button, Typography, Grid } from '@mui/material'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-import { CartItem } from './CartItem'
-import { Link } from 'react-router-dom'
+import { Cart as CartType } from '@chec/commerce.js/types/cart';
+import { Container, Button, Typography, Grid } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CartItem } from './CartItem';
+import { Link } from 'react-router-dom';
+import Animation from '../../assets/Animation.gif';
 
 type CartProps = {
-    cart: CartType
-    handleUpdateCartQuantity: (lineItemId: string, quantity: number) => Promise<void>
-    handleRemoveFromCart: (lineItemId: string) => Promise<void>
-    handleCartEmpty: () => Promise<void>
-}
+    cart?: CartType;
+    handleUpdateCartQuantity: (lineItemId: string, quantity: number) => Promise<void>;
+    handleRemoveFromCart: (lineItemId: string) => Promise<void>;
+    handleCartEmpty: () => Promise<void>;
+};
 
 const theme = createTheme({
     palette: {
-        primary: {main: '#2196f3'},
-        secondary: {main: '#212121'}
+        primary: { main: '#2196f3' },
+        secondary: { main: '#212121' }
     }
-})
+});
 
-export const Cart = ({cart, handleUpdateCartQuantity, handleRemoveFromCart, handleCartEmpty}:CartProps) => {
+export const Cart = ({ cart, handleUpdateCartQuantity, handleRemoveFromCart, handleCartEmpty }: CartProps) => {
+    
+    if (!cart) {
+        return <div className='loading'><img src={Animation} alt="loading..." /></div>;
+    }
+    
     const renderEmptyCart = (
         <Typography
             variant='subtitle1'
@@ -29,9 +35,9 @@ export const Cart = ({cart, handleUpdateCartQuantity, handleRemoveFromCart, hand
             You have no items in your cart 
             <Link to='/' color="primary">
                 start adding some. 
-            </Link>
+            </Link> 
         </Typography>
-    )
+    );
 
     const renderCart = (
         <ThemeProvider theme={theme}>
@@ -39,10 +45,9 @@ export const Cart = ({cart, handleUpdateCartQuantity, handleRemoveFromCart, hand
                 {cart.line_items.map((lineItem) => (
                    <Grid item xs={3} sm={12} key={lineItem.id}>
                     <CartItem
-                    lineItem={lineItem}
-                    cart={cart}
-                    onUpdateQuery={handleUpdateCartQuantity}
-                    onRemoveCart={handleRemoveFromCart}
+                        lineItem={lineItem}
+                        onUpdateQuery={handleUpdateCartQuantity}
+                        onRemoveCart={handleRemoveFromCart}
                     />
                    </Grid> 
                 ))}
@@ -102,16 +107,16 @@ export const Cart = ({cart, handleUpdateCartQuantity, handleRemoveFromCart, hand
                 </Container>
             </Container>
         </ThemeProvider>
-    )
+    );
 
     return (
-        <Container 
-            style={{background: '#fafafa'}}
+        <Container
+            style={{ background: '#fafafa' }}
         >
             <Typography variant='h3' component='h1' textAlign='center' my={3}>
                 Your Shopping Cart
             </Typography>
             {!cart.line_items.length ? renderEmptyCart : renderCart}
         </Container>
-    )
-}
+    );
+};
