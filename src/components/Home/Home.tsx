@@ -5,11 +5,9 @@ import Badge from "@mui/material/Badge";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Link } from "react-router-dom";
 import { Products } from "../Products/Products";
-import { useState } from "react";
-import { Product } from '@chec/commerce.js/types/product'
 
 export const Home = () => {
-  const [products] = useState<Product[]>([] as Product[])
+
   return (
     <>
     <div className="home-page">
@@ -30,9 +28,8 @@ export const Home = () => {
       <div className="home-image">
         <div className="home-link">
           <h2>Check Lenses</h2>
-          <a href="#products">
-            {" "}
-            <button>Shop</button>
+          <a href="#products-section">
+            <button>Shop Now</button>
           </a>
         </div>
         <img src={lens} alt="" />
@@ -40,7 +37,9 @@ export const Home = () => {
       </div>
     </div>
       {/* <Products products={products} onAddToCart={handleAddToCart} /> */}
-      <Products products={products} />
+      <div id="products-section">
+        <Products />
+      </div>
     </>
   );
 };

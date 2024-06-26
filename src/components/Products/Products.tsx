@@ -3,6 +3,8 @@ import { Container, Grid, Typography } from '@mui/material';
 import { Product } from './Product';
 import { commerce } from '../../lib/Commerce';
 import { useEffect, useState } from 'react';
+import Animation from '../../assets/Animation.gif'
+import './loading.css'
 
 export const Products = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -24,15 +26,15 @@ export const Products = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className='loading'><img src={Animation} alt="loading..." /></div>;
   }
 
   return (
-    <Container sx={{ backgroundColor: 'white' }}>
+    <Container sx={{ backgroundColor: 'white', marginBottom: 5}}>
       <Typography variant="h3" component="h1" textAlign="center" my={3}>
         Products
       </Typography>
-      <Grid container spacing={10} justifyContent="center">
+      <Grid container spacing={2} justifyContent="center">
         {products.map((product) => (
           <Grid item key={product.id} xs={10} sm={6} md={4} lg={3}>
             <Product product={product} />
