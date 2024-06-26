@@ -7,6 +7,6 @@ export interface ProductProps {
     };
     image: {
       url: string;
-    };
+    } | null;
   }
   
