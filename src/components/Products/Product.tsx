@@ -16,7 +16,7 @@ type ProductsProps = {
 
 export const Product = ({ product }: ProductsProps) => {
   return (
-    <Card sx={{ height: 350 }} className="product">
+    <Card sx={{ height: 350 }}>
       <CardMedia
         image={product.image?.url}
         component="img"
