@@ -6,3 +6,9 @@
   box-sizing: border-box;
   font-family: "Playwrite IT Moderna", cursive;
 }
+
+a {
+  color: white;
+  text-decoration: none;
+  list-style: none;
+}
