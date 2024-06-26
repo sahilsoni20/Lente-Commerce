@@ -1,5 +1,5 @@
 import Commerce from "@chec/commerce.js"
-import { ProductProps } from "../../Types/Type"
+import { ProductsProps } from "../../Types/Type"
 import { useEffect, useState } from "react"
 import Animation from '../../assets/Animation.gif'
 import { Container, Grid, Typography } from '@mui/material'
@@ -10,14 +10,14 @@ const COMMERCE_CHEC_PUBLIC_KEY='pk_test_575827a12ced2078111841605721c9affc1182f5
 const commerce = new Commerce(COMMERCE_CHEC_PUBLIC_KEY!, true)
 
 export const Products = () => {
-    const [products, setProducts] = useState<ProductProps[]>([])
+    const [products, setProducts] = useState<ProductsProps[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const {data} = await commerce.products.list()
-                setProducts(data as ProductProps[])
+                setProducts(data as ProductsProps[])
             } catch (error) {
                 console.error("Error while fetching product from commerce.js:", error)
             } finally {
@@ -41,7 +41,7 @@ export const Products = () => {
       <Grid container spacing={2} justifyContent="center">
         {products.map((product) => (
           <Grid item key={product.id} xs={10} sm={6} md={4} lg={3}>
-            <Product product={product} />
+            <Product/>
           </Grid>
         ))}
       </Grid>
