@@ -11,10 +11,14 @@ import {
 
 type ProductsProps = {
   product: ProductType;
-//   onAddToCart: (productId: string, quantity: number) => Promise<void>;
+  onAddToCart: (productId: string, quantity: number) => Promise<void>;
 };
 
-export const Product = ({ product }: ProductsProps) => {
+export const ProductItem = ({ product, onAddToCart }: ProductsProps) => {
+  const handleAddTocart = () => {
+    onAddToCart(product.id, 1)
+  }
+
   return (
     <Card sx={{ height: 350 }}>
       <CardMedia
@@ -56,7 +60,7 @@ export const Product = ({ product }: ProductsProps) => {
       >
         <IconButton 
             aria-label={`Add ${product.name} to cart`}
-            // onClick={() => onAddToCart(product.id, 1)}
+            onClick={handleAddTocart}
         >   
             <AddShoppingCart />
         </IconButton>
