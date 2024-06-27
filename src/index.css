@@ -12,7 +12,6 @@ html {
 }
 
 a {
-  color: white;
   text-decoration: none;
   list-style: none;
 }
@@ -30,3 +29,8 @@ a {
   width: 17%;
 }
 
+@media (max-width: 960px) {
+  .loading img {
+    width: 50%;
+  }
+}

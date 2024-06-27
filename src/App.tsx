@@ -37,6 +37,15 @@ function App() {
     }
   };
 
+  const handleEmptyCart = async (): Promise<void> => {
+    try {
+      const { cart } = await commerce.cart.empty();
+      setCart(cart);
+    } catch (error) {
+      console.error('There was an error emptying the cart', error);
+    }
+  };
+
   useEffect(() => {
     fetchCart();
   }, []);
@@ -52,6 +61,7 @@ function App() {
               cart={cart}
               handleUpdateCartQuantity={handleUpdateCartQuantity}
               handleRemoveFromCart={handleRemoveFromCart}
+              handleCartEmpty={handleEmptyCart}
             />
           }
         />

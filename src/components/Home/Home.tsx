@@ -59,7 +59,7 @@ export const Home = () => {
                 color="primary"
                 style={{ cursor: "pointer", marginTop: "1.5rem" }}
               >
-                <ShoppingCartOutlinedIcon fontSize="large" />
+                <ShoppingCartOutlinedIcon fontSize="large" sx={{color: 'white'}}/>
               </Badge>
             </Link>
           </span>

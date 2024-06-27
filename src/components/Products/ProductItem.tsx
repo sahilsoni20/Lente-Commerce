@@ -20,7 +20,7 @@ export const ProductItem = ({ product, onAddToCart }: ProductsProps) => {
   }
 
   return (
-    <Card sx={{ height: 350 }}>
+    <Card sx={{ height: 300 }}>
       <CardMedia
         image={product.image?.url}
         component="img"
@@ -29,8 +29,7 @@ export const ProductItem = ({ product, onAddToCart }: ProductsProps) => {
         sx={{
           objectFit: "cover",
           objectPosition: "center",
-          width: "100%",
-          height: "50%",
+          height: "40%",
         }}
       />
       <CardContent>

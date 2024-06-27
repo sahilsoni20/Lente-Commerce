@@ -16,6 +16,7 @@ type CartProps = {
   lineItem: LineItem;
   onUpdateQuery: (LineItemId: string, quantity: number) => Promise<void>;
   onRemoveCart: (LineItemId: string) => Promise<void>;
+  onEmptyCart: () => Promise<void>;
 };
 
 const theme = createTheme({
@@ -41,7 +42,7 @@ export const CartItem = ({
     return (
       <ThemeProvider theme={theme}>
         <Card>
-          <CardMedia image={lineItem.image?.url} sx={{ height: 260 }} />
+          <CardMedia image={lineItem.image?.url} sx={{ height: 150 }} />
           <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h5" component="h2">
               {lineItem.name}
