@@ -1,12 +1,11 @@
-import { Typography } from "@mui/material"
+import { useCustomCheckout } from "@stripe/react-stripe-js"
 
 export const Checkout = () => {
+    const checkout = useCustomCheckout()
+    console.log(checkout)
     return (
-        <>
-            <Typography variant="h6" gutterBottom>
-                Shipping Address
-            </Typography>
-            
-        </>
+        <pre>
+            {JSON.stringify(checkout.lineItems, null, 2)}
+        </pre>
     )
 }

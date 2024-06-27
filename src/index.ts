@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Response } from "express";
 import { config } from "dotenv";
 import Stripe from "stripe";
 
@@ -7,13 +7,13 @@ config();
 
 // Initialize Stripe with your secret key
 const stripe = new Stripe(process.env.STRIPE_API_KEY as string, {
-  apiVersion: "2024-06-20; custom_checkout_beta=v1" as any,
+  apiVersion: "2024-06-20",
 });
 
 const app: Express = express();
 app.use(express.json());
 
-app.post("/checkout", async (req: Request, res: Response) => {
+app.post("/checkout", async ( res: Response) => {
   try {
     const session = await stripe.checkout.sessions.create({
       line_items: [
@@ -32,8 +32,12 @@ app.post("/checkout", async (req: Request, res: Response) => {
       return_url: "http://localhost:5173/checkout",
     });
     res.json({ id: session.id });
-  } catch (error: unknown) {
-    res.status(500).json({ error: error.message });
+  } catch (error) {
+    if (error instanceof Error) {
+      res.status(500).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: "An unknown error occurred" });
+    }
   }
 });
 
