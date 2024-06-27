@@ -1,7 +1,7 @@
 import "./index.css";
 import { Home } from "./components/Home/Home";
 import { Cart } from "./components/Cart/Cart";
-import { Shipping } from "./components/Shipping/Shipping";
+import { Checkout } from "./components/Checkout/Checkout";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Cart as CartType } from "@chec/commerce.js/types/cart";
@@ -65,7 +65,7 @@ function App() {
             />
           }
         />
-        <Route path="/shipping" element={<Shipping />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </Router>
   );

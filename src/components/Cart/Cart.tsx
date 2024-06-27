@@ -103,7 +103,7 @@ export const Cart = ({
           </Button>
           <Button
             component={Link}
-            to="/shipping"
+            to="/checkout"
             size="large"
             type="button"
             variant="contained"

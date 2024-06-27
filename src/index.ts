@@ -1,17 +1,44 @@
-// import express from 'express';
-// import dotenv from 'dotenv';
+import express, { Express, Request, Response } from "express";
+import { config } from "dotenv";
+import Stripe from "stripe";
 
-// dotenv.config();
+// Load environment variables from .env file
+config();
 
-// const app = express();
-// const port = process.env.PORT || 3000;
+// Initialize Stripe with your secret key
+const stripe = new Stripe(process.env.STRIPE_API_KEY as string, {
+  apiVersion: "2024-06-20; custom_checkout_beta=v1" as any,
+});
 
-// app.use(express.json());
+const app: Express = express();
+app.use(express.json());
 
-// app.get('/', (req, res) => {
-//   res.send('Lens E-commerce API');
-// });
+app.post("/checkout", async (req: Request, res: Response) => {
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Lens",
+            },
+            unit_amount: 1000,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      return_url: "http://localhost:5173/checkout",
+    });
+    res.json({ id: session.id });
+  } catch (error: unknown) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-// app.listen(port, () => {
-//   console.log(`Server is running on http://localhost:${port}`);
-// });
+const PORT = 5713;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
