@@ -51,7 +51,7 @@ export const Cart = ({
 
   const renderCart = (
     <ThemeProvider theme={theme}>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} marginTop={5}>
         {cart.line_items.map((lineItem) => (
           <Grid item xs={12} sm={6} md={4} lg={4} key={lineItem.id}>
             <CartItem
@@ -66,6 +66,7 @@ export const Cart = ({
       <Container
         sx={{
           mt: 10,
+          mb: 5,
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -102,7 +103,7 @@ export const Cart = ({
           </Button>
           <Button
             component={Link}
-            to="/Checkout"
+            to="/shipping"
             size="large"
             type="button"
             variant="contained"

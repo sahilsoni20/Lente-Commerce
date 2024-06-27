@@ -1,5 +1,12 @@
+import { Typography } from "@mui/material"
+
 export const Shipping = () => {
     return (
-        <div>Hello from shipping</div>
+        <>
+            <Typography variant="h6" gutterBottom>
+                Shipping Address
+            </Typography>
+            
+        </>
     )
 }
