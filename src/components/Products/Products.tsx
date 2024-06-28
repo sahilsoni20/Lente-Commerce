@@ -3,7 +3,8 @@ import { Container, Grid, Typography } from '@mui/material';
 import { ProductItem } from './ProductItem';
 import { commerce } from '../../lib/Commerce';
 import { useEffect, useState } from 'react';
-import Animation from '../../assets/Animation.gif';
+import Lottie from 'react-lottie';
+import animationData from '../../assets/Animation.json';
 
 type ProductsProps = {
   products: ProductType[];
@@ -30,7 +31,16 @@ export const Products = ({ onAddToCart }: ProductsProps) => {
   }, []);
 
   if (loading) {
-    return <div className='loading'><img src={Animation} alt="loading..." /></div>;
+      const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
+      };
+    
+      return <Lottie options={defaultOptions} height={400} width={600} />;
   }
 
   return (

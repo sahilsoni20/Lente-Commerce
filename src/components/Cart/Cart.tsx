@@ -3,12 +3,15 @@ import { Container, Button, Typography, Grid } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CartItem } from "./CartItem";
 import { Link } from "react-router-dom";
-import Animation from "../../assets/Animation.gif";
-import {loadStripe} from '@stripe/stripe-js'
+import Loading from "../Loading/Loading";
+import { loadStripe } from "@stripe/stripe-js";
 
 type CartProps = {
   cart?: CartType | undefined;
-  handleUpdateCartQuantity: (lineItemId: string, quantity: number) => Promise<void>;
+  handleUpdateCartQuantity: (
+    lineItemId: string,
+    quantity: number
+  ) => Promise<void>;
   handleRemoveFromCart: (lineItemId: string) => Promise<void>;
   handleCartEmpty: () => Promise<void>;
 };
@@ -31,7 +34,7 @@ export const Cart = ({
   if (!cart) {
     return (
       <div className="loading">
-        <img src={Animation} alt="loading..." />
+        <Loading />
       </div>
     );
   }
@@ -44,34 +47,36 @@ export const Cart = ({
       mt="250px"
     >
       You have no items in your cart
-      <Link to="/" color="primary" style={{margin: '5px'}}>
+      <Link to="/" color="primary" style={{ margin: "5px" }}>
         start adding some.
       </Link>
     </Typography>
   );
 
   const makePayment = async () => {
-    const stripe = loadStripe('pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn')
+    const stripe = loadStripe(
+      "pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn"
+    );
     const body = {
-      product: cart
-    }
+      product: cart,
+    };
     const headers = {
-      'Content-Type': "application/json" 
-    }
-    const response = await fetch('/create-checkout-session', {
-      method:"POST",
-      headers:headers,
-      body:JSON.stringify(body)
-    })
+      "Content-Type": "application/json",
+    };
+    const response = await fetch("/create-checkout-session", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body),
+    });
     const session = await response.json();
     const result = stripe.redirectToCheckout({
-      sessionId:session.id
-    })
+      sessionId: session.id,
+    });
 
-    if(result.error) {
-      console.log(result.error)
+    if (result.error) {
+      console.log(result.error);
     }
-  }
+  };
 
   const renderCart = (
     <ThemeProvider theme={theme}>

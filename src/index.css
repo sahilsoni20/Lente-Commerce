@@ -25,10 +25,6 @@ a {
   text-align: center;
 }
 
-.loading img {
-  width: 17%;
-}
-
 @media (max-width: 960px) {
   .loading img {
     width: 50%;
