@@ -1,12 +1,13 @@
 import express, { Express, Response } from "express";
-import { config } from "dotenv";
 import Stripe from "stripe";
+import dotenv from "dotenv";
 
-// Load environment variables from .env file
-config();
+dotenv.config(); // Load environment variables from .env file
+
+const STRIPE_API_KEY = process.env.STRIPE_SECRET_KEY as string;
 
 // Initialize Stripe with your secret key
-const stripe = new Stripe(process.env.STRIPE_API_KEY as string, {
+const stripe = new Stripe(STRIPE_API_KEY, {
   apiVersion: "2024-06-20",
 });
 
@@ -29,13 +30,16 @@ app.post("/checkout", async ( res: Response) => {
         },
       ],
       mode: "payment",
-      return_url: "http://localhost:5173/checkout",
+      success_url: "http://localhost:5173/success",
+      cancel_url: "http://localhost:5173/cancel",
     });
     res.json({ id: session.id });
   } catch (error) {
     if (error instanceof Error) {
+      console.error("Error creating checkout session:", error.message);
       res.status(500).json({ error: error.message });
     } else {
+      console.error("Unknown error creating checkout session:", error);
       res.status(500).json({ error: "An unknown error occurred" });
     }
   }

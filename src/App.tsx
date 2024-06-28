@@ -6,12 +6,9 @@ import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Cart as CartType } from "@chec/commerce.js/types/cart";
 import { commerce } from "./lib/Commerce";
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
 
 function App() {
   const [cart, setCart] = useState<CartType>();
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const fetchCart = async () => {
     try {
@@ -53,34 +50,6 @@ function App() {
     fetchCart();
   }, []);
 
-  // Stripe setup
-  const stripePromise = loadStripe("pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn", {
-    betas: ['custom_checkout_beta_2']
-  });
-
-  useEffect(() => {
-    // Fetch the client secret from your backend
-    const fetchClientSecret = async () => {
-      try {
-        const response = await fetch("/create-payment-intent", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ items: cart?.line_items }) // Example payload
-        });
-        const { clientSecret } = await response.json();
-        setClientSecret(clientSecret);
-      } catch (error) {
-        console.error("Error fetching client secret:", error);
-      }
-    };
-
-    if (cart) {
-      fetchClientSecret();
-    }
-  }, [cart]);
-
   return (
     <Router>
       <Routes>
@@ -96,11 +65,7 @@ function App() {
             />
           }
         />
-        {clientSecret && (
-          <Elements stripe={stripePromise} options={{ clientSecret }}>
             <Route path="/checkout" element={<Checkout />} />
-          </Elements>
-        )}
       </Routes>
     </Router>
   );
