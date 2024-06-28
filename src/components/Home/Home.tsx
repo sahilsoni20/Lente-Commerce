@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { Products } from "../Products/Products";
 import { Product as ProductType } from '@chec/commerce.js/types/product';
 import { useEffect, useState } from "react";
-import { commerce } from "../../lib/Commerce";
+import { commerce } from "../../Lib/Commerce";
 import { Cart as CartType } from '@chec/commerce.js/types/cart';
 
 export const Home = () => {

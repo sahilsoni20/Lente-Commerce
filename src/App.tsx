@@ -5,7 +5,7 @@ import { Checkout } from "./components/Checkout/Checkout";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Cart as CartType } from "@chec/commerce.js/types/cart";
-import { commerce } from "./lib/Commerce";
+import { commerce } from "./Lib/Commerce";
 
 function App() {
   const [cart, setCart] = useState<CartType>();

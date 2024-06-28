@@ -1,7 +1,7 @@
 import { Product as ProductType } from '@chec/commerce.js/types/product';
 import { Container, Grid, Typography } from '@mui/material';
 import { ProductItem } from './ProductItem';
-import { commerce } from '../../lib/Commerce';
+import { commerce } from '../../Lib/Commerce';
 import { useEffect, useState } from 'react';
 import Lottie from 'react-lottie';
 import animationData from '../../assets/Animation.json';

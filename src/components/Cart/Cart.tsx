@@ -23,6 +23,8 @@ const theme = createTheme({
   },
 });
 
+const stripePromise = loadStripe("pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn");
+
 export const Cart = ({
   cart,
   handleUpdateCartQuantity,
@@ -54,27 +56,26 @@ export const Cart = ({
   );
 
   const makePayment = async () => {
-    const stripe = loadStripe(
-      "pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn"
-    );
+    const stripe = await stripePromise;
     const body = {
-      product: cart,
+      products: cart.line_items, // Corrected from product to products
     };
     const headers = {
       "Content-Type": "application/json",
     };
-    const response = await fetch("/create-checkout-session", {
+    const response = await fetch("/checkout", {
       method: "POST",
       headers: headers,
       body: JSON.stringify(body),
     });
     const session = await response.json();
-    const result = stripe.redirectToCheckout({
+
+    const { error } = await stripe.redirectToCheckout({
       sessionId: session.id,
     });
 
-    if (result.error) {
-      console.log(result.error);
+    if (error) {
+      console.log(error);
     }
   };
 
@@ -131,8 +132,6 @@ export const Cart = ({
             Empty Cart
           </Button>
           <Button
-            component={Link}
-            to="/checkout"
             size="large"
             type="button"
             variant="contained"
