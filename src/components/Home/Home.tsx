@@ -76,7 +76,7 @@ export const Home = () => {
         </div>
       </div>
       <div id="products-section">
-        <Products products={products} onAddToCart={handleAddToCart} />
+        <Products product={products} onAddToCart={handleAddToCart} />
       </div>
     </>
   );

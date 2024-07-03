@@ -1,39 +1,29 @@
-import { Cart as CartType } from "@chec/commerce.js/types/cart";
-import { Container, Button, Typography, Grid } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CartItem } from "./CartItem";
-import { Link } from "react-router-dom";
-import Loading from "../Loading/Loading";
-import { loadStripe } from "@stripe/stripe-js";
-
-type CartProps = {
-  cart?: CartType | undefined;
-  handleUpdateCartQuantity: (
-    lineItemId: string,
-    quantity: number
-  ) => Promise<void>;
-  handleRemoveFromCart: (lineItemId: string) => Promise<void>;
-  handleCartEmpty: () => Promise<void>;
-};
+import React, { useEffect } from 'react';
+import { Container, Button, Typography, Grid } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CartItem } from './CartItem';
+import { Link } from 'react-router-dom';
+import Loading from '../Loading/Loading';
+import { loadStripe } from '@stripe/stripe-js';
+import { useCartStore } from '../../Lib/Store';
 
 const theme = createTheme({
   palette: {
-    primary: { main: "#2196f3" },
-    secondary: { main: "#212121" },
+    primary: { main: '#2196f3' },
+    secondary: { main: '#212121' },
   },
 });
 
-const stripePromise = loadStripe("pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn");
+const stripePromise = loadStripe('pk_test_51PWG7KFJT29WYeemKcR7W2MCE0lF7iuEel1SJsY0T2hWl0e15KboEz2pF4IMEBQU60GQvOkcZzSPYcrlcpAYepAN00ah6MtRHn');
 
-export const Cart = ({
-  cart,
-  handleUpdateCartQuantity,
-  handleRemoveFromCart,
-  handleCartEmpty,
-}: CartProps) => {
-  console.log("cart item", cart);
+export const Cart: React.FC = () => {
+  const { cart, loading, fetchCart, updateItemQuantity, removeItem, emptyCart } = useCartStore();
 
-  if (!cart) {
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
+
+  if (loading) {
     return (
       <div className="loading">
         <Loading />
@@ -41,15 +31,14 @@ export const Cart = ({
     );
   }
 
+  if (!cart) {
+    return null; // Handle loading state if cart is still undefined
+  }
+
   const renderEmptyCart = (
-    <Typography
-      variant="subtitle1"
-      component="h2"
-      textAlign="center"
-      mt="250px"
-    >
+    <Typography variant="subtitle1" component="h2" textAlign="center" mt="250px">
       You have no items in your cart
-      <Link to="/" color="primary" style={{ margin: "5px" }}>
+      <Link to="/" color="primary" style={{ margin: '5px' }}>
         start adding some.
       </Link>
     </Typography>
@@ -57,25 +46,33 @@ export const Cart = ({
 
   const makePayment = async () => {
     const stripe = await stripePromise;
+    if (!stripe) {
+      console.error('Failed to load Stripe.');
+      return;
+    }
+
     const body = {
-      products: cart.line_items, // Corrected from product to products
+      products: cart.line_items,
     };
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     };
-    const response = await fetch("/checkout", {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify(body),
-    });
-    const session = await response.json();
+    try {
+      const response = await fetch('/checkout', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(body),
+      });
+      const session = await response.json();
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
 
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: session.id,
-    });
-
-    if (error) {
-      console.log(error);
+      if (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.error('Error during payment:', error);
     }
   };
 
@@ -86,9 +83,8 @@ export const Cart = ({
           <Grid item xs={12} sm={6} md={4} lg={4} key={lineItem.id}>
             <CartItem
               lineItem={lineItem}
-              onUpdateQuery={handleUpdateCartQuantity}
-              onRemoveCart={handleRemoveFromCart}
-              onEmptyCart={handleCartEmpty}
+              onUpdateQuery={updateItemQuantity}
+              onRemoveCart={removeItem}
             />
           </Grid>
         ))}
@@ -97,24 +93,24 @@ export const Cart = ({
         sx={{
           mt: 10,
           mb: 5,
-          display: "flex",
-          justifyContent: "space-between",
+          display: 'flex',
+          justifyContent: 'space-between',
         }}
       >
         <Typography
           variant="h4"
           component="h2"
           sx={{
-            width: "100%",
+            width: '100%',
           }}
         >
           Subtotal: {cart.subtotal.formatted_with_symbol}
         </Typography>
         <Container
           sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
           }}
         >
           <Button
@@ -127,7 +123,7 @@ export const Cart = ({
               mb: 2,
               mr: 2,
             }}
-            onClick={handleCartEmpty}
+            onClick={emptyCart}
           >
             Empty Cart
           </Button>
@@ -159,3 +155,4 @@ export const Cart = ({
     </Container>
   );
 };
+

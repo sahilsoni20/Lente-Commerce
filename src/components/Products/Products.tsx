@@ -1,46 +1,33 @@
-import { Product as ProductType } from '@chec/commerce.js/types/product';
+// src/components/Products/Products.tsx
+import React, { useEffect } from 'react';
 import { Container, Grid, Typography } from '@mui/material';
 import { ProductItem } from './ProductItem';
-import { commerce } from '../../Lib/Commerce';
-import { useEffect, useState } from 'react';
+import { useProductStore } from '../../Lib/Store';
 import Lottie from 'react-lottie';
 import animationData from '../../assets/Animation.json';
 
 type ProductsProps = {
-  products: ProductType[];
   onAddToCart: (productId: string, quantity: number) => Promise<void>;
 };
 
-export const Products = ({ onAddToCart }: ProductsProps) => {
-  const [productList, setProductList] = useState<ProductType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+export const Products: React.FC<ProductsProps> = ({ onAddToCart }) => {
+  const { product, loading, fetchProducts } = useProductStore();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const { data } = await commerce.products.list();
-        setProductList(data);
-      } catch (error) {
-        console.error('There was an error fetching the products', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
   if (loading) {
-      const defaultOptions = {
-        loop: true,
-        autoplay: true,
-        animationData: animationData,
-        rendererSettings: {
-          preserveAspectRatio: 'xMidYMid slice'
-        }
-      };
-    
-      return <Lottie options={defaultOptions} height={400} width={600} />;
+    const defaultOptions = {
+      loop: true,
+      autoplay: true,
+      animationData: animationData,
+      rendererSettings: {
+        preserveAspectRatio: 'xMidYMid slice',
+      },
+    };
+
+    return <Lottie options={defaultOptions} height={400} width={600} />;
   }
 
   return (
@@ -49,7 +36,7 @@ export const Products = ({ onAddToCart }: ProductsProps) => {
         Products
       </Typography>
       <Grid container spacing={2} justifyContent="center">
-        {productList.map((product) => (
+        {product.map((product) => (
           <Grid item key={product.id} xs={10} sm={6} md={4} lg={3}>
             <ProductItem product={product} onAddToCart={onAddToCart} />
           </Grid>

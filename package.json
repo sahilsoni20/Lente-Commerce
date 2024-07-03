@@ -26,7 +26,8 @@
     "react-hook-form": "^7.52.0",
     "react-lottie": "^1.2.4",
     "react-router-dom": "^6.24.0",
-    "stripe": "^16.0.0"
+    "stripe": "^16.0.0",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/chec__commerce.js": "^2.8.11",
